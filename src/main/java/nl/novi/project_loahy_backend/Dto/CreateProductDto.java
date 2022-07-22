@@ -4,9 +4,8 @@ import nl.novi.project_loahy_backend.model.FileUploadResponse;
 
 import javax.persistence.OneToOne;
 
-public class ProductDto {
+public class CreateProductDto {
 
-    public Long ProductNumber;
 
     public String productName;
 
@@ -16,14 +15,6 @@ public class ProductDto {
 
     @OneToOne
     FileUploadResponse file;
-
-    public Long getProductNumber() {
-        return ProductNumber;
-    }
-
-    public void setProductNumber(Long productNumber) {
-        ProductNumber = productNumber;
-    }
 
     public String getProductName() {
         return productName;

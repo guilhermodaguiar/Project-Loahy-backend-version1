@@ -24,12 +24,12 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    //    post for single upload
+
     @PostMapping("/products/image-upload")
     FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file){
 
         // next line makes url. example "http://localhost:8080/download/naam.jpg"
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image-download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
 
         String contentType = file.getContentType();
 

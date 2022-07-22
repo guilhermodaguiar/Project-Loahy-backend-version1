@@ -1,29 +1,16 @@
 package nl.novi.project_loahy_backend.Dto;
 
+public class CreateUserDto {
 
-public class UserDto {
+    private String userName;
 
-    public Long userNumber;
+    private String userEmail;
 
-    public String userName;
+    private String userPassword;
 
-    public String userEmail;
+    private String userAdres;
 
-    public String userPassword;
-
-    public String userAdres;
-
-
-    public Long userPhone;
-
-
-    public Long getUserNumber() {
-        return userNumber;
-    }
-
-    public void setUserNumber(Long userNumber) {
-        this.userNumber = userNumber;
-    }
+    private Long userPhone;
 
     public String getUserName() {
         return userName;
@@ -41,6 +28,14 @@ public class UserDto {
         this.userEmail = userEmail;
     }
 
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
     public String getUserAdres() {
         return userAdres;
     }
@@ -55,13 +50,5 @@ public class UserDto {
 
     public void setUserPhone(Long userPhone) {
         this.userPhone = userPhone;
-    }
-
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
     }
 }

@@ -1,5 +1,7 @@
 package nl.novi.project_loahy_backend.service;
 
+import nl.novi.project_loahy_backend.Dto.CreateUserDto;
+import nl.novi.project_loahy_backend.Dto.UserDto;
 import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
 import nl.novi.project_loahy_backend.model.User;
 import nl.novi.project_loahy_backend.repository.UserRepository;
@@ -21,9 +23,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUser(Long userId) {
+    public User getUser(Long userNumber) {
 
-        Optional<User> user = userRepository.findById(userId);
+        Optional<User> user = userRepository.findById(userNumber);
 
         if(user.isPresent()) {
 
@@ -37,27 +39,39 @@ public class UserService {
 
     }
 
-    public User saveUser(User user) {
+    public UserDto createUser(CreateUserDto createUserDto) {
 
-        return userRepository.save(user);
+        User user = new User();
+        user.setUserName(createUserDto.getUserName());
+        user.setUserEmail(createUserDto.getUserEmail());
+        user.setUserPassword(createUserDto.getUserPassword());
+        user.setUserAdres(createUserDto.getUserAdres());
+        user.setUserPhone(createUserDto.getUserPhone());
 
+        final User savedUser = userRepository.save(user);
+
+        UserDto userDto = new UserDto();
+        userDto.setUserNumber(savedUser.getUserNumber());
+        userDto.setUserName(savedUser.getUserName());
+        userDto.setUserEmail(savedUser.getUserEmail());
+        userDto.setUserAdres(savedUser.getUserAdres());
+        userDto.setUserPhone(savedUser.getUserPhone());
+
+        return userDto;
     }
 
-    public User updateUser(Long userId, User user) {
+    public User updateUser(Long userNumber, User user) {
 
-        Optional<User> optionalUser = userRepository.findById(userId);
+        Optional<User> optionalUser = userRepository.findById(userNumber);
 
         if (optionalUser.isPresent()) {
 
             User old = optionalUser.get();
-            if(user.getUserId() != null){
-                old.setUserId(userId);
+            if(user.getUserNumber() != null){
+                old.setUserNumber(userNumber);
             }
-            if(user.getUserFirstName() != null){
-                old.setUserFirstName(user.getUserFirstName());
-            }
-            if(user.getUserLastName() != null){
-                old.setUserLastName(user.getUserLastName());
+            if(user.getUserName() != null){
+                old.setUserName(user.getUserName());
             }
             if(user.getUserEmail() != null){
                 old.setUserEmail(user.getUserEmail());
@@ -77,9 +91,9 @@ public class UserService {
         }
     }
 
-    public void deleteUser(Long userId) {
+    public void deleteUser(Long userNumber) {
 
-        userRepository.deleteById(userId);
+        userRepository.deleteById(userNumber);
 
     }
 

@@ -1,12 +1,13 @@
 package nl.novi.project_loahy_backend.controller;
 
+import nl.novi.project_loahy_backend.Dto.CreateUserDto;
+import nl.novi.project_loahy_backend.Dto.UserDto;
 import nl.novi.project_loahy_backend.model.User;
 import nl.novi.project_loahy_backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.transaction.Transactional;
 import java.util.List;
 
 @CrossOrigin
@@ -22,7 +23,6 @@ public class UserController {
     }
 
     @GetMapping
-    @Transactional
     public List<User> getUsers() {
         List<User> users;
         users = userService.getUsers();
@@ -30,30 +30,31 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    @Transactional
-    public User getUser(@PathVariable("id") Long userId) {
+    public User getUser(@PathVariable("id") Long userNumber) {
 
-        return userService.getUser(userId);
+        return userService.getUser(userNumber);
 
     }
 
-    @PostMapping
-    public User saveUser(@RequestBody User user) {
+    @PostMapping()
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserDto createUserDto) {
 
-        return userService.saveUser(user);
+        final UserDto createdUser = userService.createUser(createUserDto);
+
+        return ResponseEntity.ok(createdUser);
     }
 
-    @PutMapping("/{userId}")
-    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
+    @PutMapping("/{userNumber}")
+    public User updateUser(@PathVariable Long userNumber, @RequestBody User user) {
 
-        return userService.updateUser(userId, user);
+        return userService.updateUser(userNumber, user);
 
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable("id") Long userId) {
+    public void deleteUser(@PathVariable("id") Long userNumber) {
 
-        userService.deleteUser(userId);
+        userService.deleteUser(userNumber);
 
     }
 

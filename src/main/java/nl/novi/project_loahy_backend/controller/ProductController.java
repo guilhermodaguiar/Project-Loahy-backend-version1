@@ -1,9 +1,11 @@
 package nl.novi.project_loahy_backend.controller;
 
+import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 import nl.novi.project_loahy_backend.model.Product;
 import nl.novi.project_loahy_backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,13 +48,14 @@ public class ProductController {
     }
 
     @PostMapping
-    public Product saveProduct(@RequestBody Product product) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody CreatedProductDto createdProductDto) {
 
-        return productService.saveProduct(product);
+        final ProductDto createdProduct = productService.createProduct(createdProductDto)
 
+        return ResponseEntity.ok(createdProduct);
     }
 
-    @PutMapping("/{product-id}")
+    @PutMapping("/{productNumber}")
     public Product updateProduct(@PathVariable Long productNumber, @RequestBody Product product) {
 
         return productService.updateProduct(productNumber, product);

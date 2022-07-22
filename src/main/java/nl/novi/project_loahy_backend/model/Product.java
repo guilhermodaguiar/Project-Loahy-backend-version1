@@ -30,7 +30,12 @@ public class Product{
     @OneToOne
     FileUploadResponse file;
 
-        
+
+    public Product(String productInformation, String productName, Long productQuantity) {
+        this.productInformation = productInformation;
+        this.productName = productName;
+        this.productQuantity = productQuantity;
+    }
     public Product(Long productNumber, String productInformation, String productName, Long productQuantity) {
         this.productNumber = productNumber;
         this.productInformation = productInformation;

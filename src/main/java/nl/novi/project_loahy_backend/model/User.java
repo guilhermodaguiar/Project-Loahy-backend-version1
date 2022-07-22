@@ -1,29 +1,44 @@
 package nl.novi.project_loahy_backend.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 
 
 @Entity
-@Table(name="Users")
+@Table(name="users")
 public class User {
 
     @Id
-    @SequenceGenerator(
-            name = "userId_sequence",
-            sequenceName = "userId_sequence",
-            allocationSize = 1
+    @GeneratedValue(generator = "sequence-generator")
+    @GenericGenerator(
+            name = "sequence-generator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "user_sequence"),
+                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1001"),
+                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
+            }
     )
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "userId_sequence")
-    private Long userId;
+    private Long userNumber;
 
-    @Column(name = "First Name")
-    private String userFirstName;
+    @Column(name = "userName")
+    private String userName;
 
-    @Column(name = "Last Name")
-    private String userLastName;
     @Column(name = "Email")
     private String userEmail;
+
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    @Column(name="Password")
+    private String userPassword;
     @Column(name = "Adres")
     private String userAdres;
     @Column(name = "Phone")
@@ -34,39 +49,38 @@ public class User {
     }
 
 
-    public User(Long userId, String userFirstName, String userLastName, String userEmail, String userAdres, Long userPhone) {
-        this.userId = userId;
-        this.userFirstName = userFirstName;
-        this.userLastName = userLastName;
+    public User(Long userNumber, String userName, String userEmail, String userAdres, Long userPhone) {
+        this.userNumber = userNumber;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.userAdres = userAdres;
+        this.userPhone = userPhone;
+    }
+
+    public User(String userName, String userEmail, String userAdres, Long userPhone) {
+        this.userName = userName;
         this.userEmail = userEmail;
         this.userAdres = userAdres;
         this.userPhone = userPhone;
     }
 
 
-    public Long getUserId() {
-        return userId;
+    public Long getUserNumber() {
+        return userNumber;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserNumber(Long userId) {
+        this.userNumber = userId;
     }
 
-    public String getUserFirstName() {
-        return userFirstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUserFirstName(String userFirstName) {
-        this.userFirstName = userFirstName;
+    public void setUserName(String userFirstName) {
+        this.userName = userFirstName;
     }
 
-    public String getUserLastName() {
-        return userLastName;
-    }
-
-    public void setUserLastName(String userLastName) {
-        this.userLastName = userLastName;
-    }
 
     public String getUserEmail() {
         return userEmail;

@@ -13,8 +13,10 @@ import java.util.Optional;
 
 @Service
 public class ProductService {
+    @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
     private final FileUploadRepository uploadRepository;
 
     @Autowired
@@ -45,7 +47,7 @@ public class ProductService {
 
     }
 
-    public Product saveProduct(Product product) {
+    public Product createProduct(Product product) {
 
         return productRepository.save(product);
 
@@ -100,11 +102,11 @@ public class ProductService {
 
         if (optionalProduct.isPresent() && fileUploadResponse.isPresent()) {
 
-            FileUploadResponse photo = fileUploadResponse.get();
+            FileUploadResponse image = fileUploadResponse.get();
 
             Product product = optionalProduct.get();
 
-            product.setFile(photo);
+            product.setFile(image);
 
             productRepository.save(product);
 
