@@ -21,6 +21,7 @@ public class ProductDto {
     @Max(20)
     private Long productQuantity;
 
+    private Long productPrice;
 
     @OneToOne
     FileUploadResponse file;
@@ -63,5 +64,13 @@ public class ProductDto {
 
     public void setFile(FileUploadResponse file) {
         this.file = file;
+    }
+
+    public Long getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Long productPrice) {
+        this.productPrice = productPrice;
     }
 }

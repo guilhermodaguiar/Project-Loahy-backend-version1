@@ -24,8 +24,9 @@ public class Product{
     private String productName;
     private String productInformation;
 
-    private Long productQuantity;
+    private Long productPrice;
 
+    private Long productQuantity;
 
     @OneToOne
     FileUploadResponse file;
@@ -86,6 +87,14 @@ public class Product{
         public void setFile(FileUploadResponse productFile) {
             this.file = productFile;
         }
+
+    public Long getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Long productPrice) {
+        this.productPrice = productPrice;
+    }
 }
 
 

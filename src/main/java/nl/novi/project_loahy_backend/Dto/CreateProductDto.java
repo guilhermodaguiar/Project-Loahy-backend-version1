@@ -6,9 +6,11 @@ import javax.persistence.OneToOne;
 
 public class CreateProductDto {
 
-    public String productName;
-    public String productInformation;
-    public Long productQuantity;
+    private String productName;
+    private String productInformation;
+    private Long productQuantity;
+
+    private Long productPrice;
 
     @OneToOne
     FileUploadResponse file;
@@ -43,5 +45,13 @@ public class CreateProductDto {
 
     public void setFile(FileUploadResponse file) {
         this.file = file;
+    }
+
+    public Long getProductPrice() {
+        return productPrice;
+    }
+
+    public void setProductPrice(Long productPrice) {
+        this.productPrice = productPrice;
     }
 }

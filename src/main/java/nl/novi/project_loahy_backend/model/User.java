@@ -1,6 +1,7 @@
 package nl.novi.project_loahy_backend.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Entity(name="users")
@@ -20,6 +21,9 @@ public class User {
     private String userAdres;
 
     private Long userPhone;
+
+    @OneToMany(mappedBy = "userName")
+    private List<Order> orders;
 
 
     public User() {
@@ -88,6 +92,14 @@ public class User {
 
     public void setUserPassword(String userPassword) {
         this.userPassword = userPassword;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
     }
 }
 
