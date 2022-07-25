@@ -2,12 +2,20 @@ package nl.novi.project_loahy_backend.Dto;
 
 public class ContactDto {
 
+    private Long contactNumber;
+    private String contactName;
+    private String contactEmail;
+    private Long contactPhone;
+    private String contactOrganisation;
+    private String remark;
 
-    public String contactName;
-    public String contactEmail;
-    public Long contactPhone;
-    public String contactOrganisation;
-    public String remark;
+    public Long getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(Long contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 
     public String getContactName() {
         return contactName;

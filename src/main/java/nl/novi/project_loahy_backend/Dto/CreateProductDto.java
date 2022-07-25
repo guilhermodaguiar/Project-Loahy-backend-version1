@@ -6,11 +6,8 @@ import javax.persistence.OneToOne;
 
 public class CreateProductDto {
 
-
     public String productName;
-
     public String productInformation;
-
     public Long productQuantity;
 
     @OneToOne

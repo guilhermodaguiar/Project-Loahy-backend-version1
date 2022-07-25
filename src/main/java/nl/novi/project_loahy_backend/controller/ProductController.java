@@ -1,5 +1,7 @@
 package nl.novi.project_loahy_backend.controller;
 
+import nl.novi.project_loahy_backend.Dto.ContactDto;
+import nl.novi.project_loahy_backend.Dto.CreateProductDto;
 import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 import nl.novi.project_loahy_backend.model.Product;
@@ -27,30 +29,29 @@ public class ProductController {
 
     @GetMapping
     @Transactional
-    public List<Product> getProducts() {
+    public ResponseEntity<List<ProductDto>> getProducts() {
 
-        List<Product> products;
+        List<ProductDto> productsDto;
+        productsDto = productService.getProducts();
 
-
-        products = productService.getProducts();
-
-
-        return products;
+        return ResponseEntity.ok(productsDto);
 
     }
 
-    @GetMapping("/{product-id}")
+    //later aanpassen
+    @GetMapping("/{product-number}")
     @Transactional
-    public Product getProduct(@PathVariable("product-id") Long productNumber) {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("product-number") Long productNumber) {
 
-        return productService.getProduct(productNumber);
+        ProductDto optionalProduct = productService.getProduct(productNumber);
+        return ResponseEntity.ok().body(optionalProduct);
 
     }
 
     @PostMapping
-    public ResponseEntity<ProductDto> createProduct(@RequestBody CreatedProductDto createdProductDto) {
+    public ResponseEntity<ProductDto> createProduct(@RequestBody CreateProductDto createdProductDto) {
 
-        final ProductDto createdProduct = productService.createProduct(createdProductDto)
+        final ProductDto createdProduct = productService.createProduct(createdProductDto);
 
         return ResponseEntity.ok(createdProduct);
     }
@@ -62,15 +63,16 @@ public class ProductController {
 
     }
 
-    @DeleteMapping("/{product-id}")
-    public void deleteProduct(@PathVariable("product-id") Long productNumber) {
 
+    @DeleteMapping(path = "/{product-id}")
+    public ResponseEntity<ProductDto> deleteContact(@PathVariable("product-id") Long productNumber) {
         productService.deleteProduct(productNumber);
-
+        return ResponseEntity.noContent().build();
     }
 
+
     @PostMapping("/{product-id}/product-image")
-    public void assignPhotoToProduct(@PathVariable("product-id") Long productNumber,
+    public void assignImageToProduct(@PathVariable("product-id") Long productNumber,
                                      @RequestBody MultipartFile file) {
 
         FileUploadResponse productImage = imageController.singleFileUpload(file);

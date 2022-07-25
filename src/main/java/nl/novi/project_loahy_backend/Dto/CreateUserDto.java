@@ -1,16 +1,21 @@
 package nl.novi.project_loahy_backend.Dto;
 
-public class CreateUserDto {
+import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotBlank;
+
+public class CreateUserDto {
+    @Length(min = 30, max = 100)
     private String userName;
 
     private String userEmail;
-
+    @NotBlank
     private String userPassword;
-
+    @NotBlank
     private String userAdres;
-
+    @NotBlank
     private Long userPhone;
+
 
     public String getUserName() {
         return userName;

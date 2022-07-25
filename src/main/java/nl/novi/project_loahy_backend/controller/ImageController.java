@@ -28,7 +28,6 @@ public class ImageController {
     @PostMapping("/products/image-upload")
     FileUploadResponse singleFileUpload(@RequestParam("file") MultipartFile file){
 
-        // next line makes url. example "http://localhost:8080/download/naam.jpg"
         String url = ServletUriComponentsBuilder.fromCurrentContextPath().path("/image-download/").path(Objects.requireNonNull(file.getOriginalFilename())).toUriString();
 
         String contentType = file.getContentType();
@@ -38,15 +37,12 @@ public class ImageController {
         return new FileUploadResponse(fileName, contentType, url );
     }
 
-    //    get for single download
+
     @GetMapping("/products/image-download/{fileName}")
     ResponseEntity<Resource> downLoadSingleFile(@PathVariable String fileName, HttpServletRequest request) {
 
         Resource resource = imageService.downLoadFile(fileName);
 
-//        this mediaType decides witch type you accept if you only accept 1 type
-//        MediaType contentType = MediaType.IMAGE_JPEG;
-//        this is going to accept multiple types
         String mimeType;
 
         try{
@@ -55,9 +51,6 @@ public class ImageController {
             mimeType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
         }
 
-//        for download attachment use next line
-//        return ResponseEntity.ok().contentType(contentType).header(HttpHeaders.CONTENT_DISPOSITION, "attachment;fileName=" + resource.getFilename()).body(resource);
-//        for showing image in browser
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(mimeType)).header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + resource.getFilename()).body(resource);
     }
 

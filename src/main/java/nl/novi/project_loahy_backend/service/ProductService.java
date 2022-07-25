@@ -1,5 +1,7 @@
 package nl.novi.project_loahy_backend.service;
 
+import nl.novi.project_loahy_backend.Dto.CreateProductDto;
+import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 import nl.novi.project_loahy_backend.model.Product;
@@ -25,15 +27,16 @@ public class ProductService {
         this.uploadRepository = uploadRepository;
     }
 
-    public List<Product> getProducts() {
+    //later aanpassen
+    public List<ProductDto> getProducts() {
 
         return productRepository.findAll();
 
     }
-
+    //later aanpassen
     public Product getProduct(Long productNumber) {
 
-        Optional<Product> product = productRepository.findById(productNumber);
+        Optional<ProductDto> product = productRepository.findById(productNumber);
 
         if(product.isPresent()) {
 
@@ -47,12 +50,25 @@ public class ProductService {
 
     }
 
-    public Product createProduct(Product product) {
+    public ProductDto createProduct(CreateProductDto createProductDto) {
 
-        return productRepository.save(product);
+        Product product = new Product();
+        product.setProductName(createProductDto.getProductName());
+        product.setProductInformation(createProductDto.getProductInformation());
+        product.setProductQuantity(createProductDto.getProductQuantity());
 
+        final Product savedProduct = productRepository.save(product);
+
+        ProductDto productDto = new ProductDto();
+        productDto.setProductNumber(savedProduct.getProductNumber());
+        productDto.setProductName(savedProduct.getProductName());
+        productDto.setProductInformation(savedProduct.getProductInformation());
+        productDto.setProductQuantity(savedProduct.getProductQuantity());
+
+        return productDto;
     }
 
+    //later aanpassen
     public Product updateProduct(Long productNumber, Product product) {
 
         Optional<Product> optionalProduct = productRepository.findById(productNumber);
@@ -89,11 +105,10 @@ public class ProductService {
     }
 
     public void deleteProduct(Long productNumber) {
-
         productRepository.deleteById(productNumber);
-
     }
 
+    //later aanpassen
     public void assignImageToProduct(String name, Long productNumber) {
 
         Optional<Product> optionalProduct = productRepository.findById(productNumber);

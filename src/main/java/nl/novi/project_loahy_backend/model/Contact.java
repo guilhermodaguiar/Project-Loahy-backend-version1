@@ -10,22 +10,32 @@ import javax.persistence.Table;
 public class Contact {
 
     @Id
-    @Column(nullable = false, unique = true)
+    @Column
+    private Long contactNumber;
+    @Column
     private String contactName;
-
     @Column
     private String contactEmail;
     @Column
     private Long contactPhone;
-
     @Column
     private String contactOrganisation;
-
     @Column
     private String remark;
 
+
+
+
     public String getContactName() {
         return contactName;
+    }
+
+    public Long getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(Long contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public void setContactName(String contactName) {

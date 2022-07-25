@@ -1,18 +1,26 @@
 package nl.novi.project_loahy_backend.Dto;
 
+import lombok.Data;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
+@Data
 public class ProductDto {
 
-    public Long ProductNumber;
+    private Long ProductNumber;
+    @NotBlank
+    private String productName;
+    @Size(min=10, max=800, message = "product information must be between 10 and 800 characters")
+    private String productInformation;
+    @Min(1)
+    @Max(20)
+    private Long productQuantity;
 
-    public String productName;
-
-    public String productInformation;
-
-    public Long productQuantity;
 
     @OneToOne
     FileUploadResponse file;

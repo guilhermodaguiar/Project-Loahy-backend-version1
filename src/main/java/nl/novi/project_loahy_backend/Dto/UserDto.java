@@ -1,20 +1,19 @@
 package nl.novi.project_loahy_backend.Dto;
 
 
+import lombok.Data;
+
+@Data
 public class UserDto {
 
-    public Long userNumber;
+    private Long userNumber;
+    private String userName;
 
-    public String userName;
+    private String userEmail;
 
-    public String userEmail;
+    private String userAdres;
 
-    public String userPassword;
-
-    public String userAdres;
-
-
-    public Long userPhone;
+    private Long userPhone;
 
 
     public Long getUserNumber() {
@@ -57,11 +56,5 @@ public class UserDto {
         this.userPhone = userPhone;
     }
 
-    public String getUserPassword() {
-        return userPassword;
-    }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
 }

@@ -1,53 +1,29 @@
 package nl.novi.project_loahy_backend.model;
 
-import org.hibernate.annotations.GenericGenerator;
-
 import javax.persistence.*;
 
 
-@Entity
-@Table(name="users")
+@Entity(name="users")
 public class User {
 
     @Id
-    @GeneratedValue(generator = "sequence-generator")
-    @GenericGenerator(
-            name = "sequence-generator",
-            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
-            parameters = {
-                    @org.hibernate.annotations.Parameter(name = "sequence_name", value = "user_sequence"),
-                    @org.hibernate.annotations.Parameter(name = "initial_value", value = "1001"),
-                    @org.hibernate.annotations.Parameter(name = "increment_size", value = "1")
-            }
-    )
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNumber;
 
-    @Column(name = "userName")
+    @Column(length = 100)
     private String userName;
 
-    @Column(name = "Email")
     private String userEmail;
 
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    @Column(name="Password")
     private String userPassword;
-    @Column(name = "Adres")
+
     private String userAdres;
-    @Column(name = "Phone")
+
     private Long userPhone;
 
 
     public User() {
     }
-
 
     public User(Long userNumber, String userName, String userEmail, String userAdres, Long userPhone) {
         this.userNumber = userNumber;
@@ -106,6 +82,12 @@ public class User {
         this.userPhone = userPhone;
     }
 
+    public String getUserPassword() {
+        return userPassword;
+    }
 
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
 }
 

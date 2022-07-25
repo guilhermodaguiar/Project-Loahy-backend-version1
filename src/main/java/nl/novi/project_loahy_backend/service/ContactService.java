@@ -1,16 +1,13 @@
 package nl.novi.project_loahy_backend.service;
 
 import nl.novi.project_loahy_backend.Dto.ContactDto;
+import nl.novi.project_loahy_backend.Dto.CreateContactDto;
 import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
 import nl.novi.project_loahy_backend.model.Contact;
 import nl.novi.project_loahy_backend.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,44 +15,63 @@ import java.util.Optional;
 public class ContactService {
 
     @Autowired
-    private ContactRepository contactRepository;
+    private final ContactRepository contactRepository;
 
-    public List<ContactDto> getContacts() {
-        List<ContactDto> collection = new ArrayList<>();
-        List<Contact> list = contactRepository.findAll();
-        for (Contact contact : list) {
-            collection.add(fromContact(contact));
+    @Autowired
+    public ContactService(ContactRepository contactRepository) {
+        this.contactRepository = contactRepository;
+    }
+
+    public List<ContactDto> getContacts(){
+        return contactRepository.findAll();
+    }
+    //later aanpassen
+    public ContactDto getContact(Long contactNumber) {
+
+        Optional<Contact> contact = contactRepository.findById(contactNumber);
+
+        if(contact.isPresent()) {
+
+            return contact.get();
+
+        } else {
+
+            throw new RecordNotFoundException("Contact does not exist");
+
         }
-        return collection;
-    }
-
-    public ContactDto getContact(String contactName) {
-        new ContactDto();
-        ContactDto dto;
-        Optional<Contact> contact = contactRepository.findById(contactName);
-        if (contact.isPresent()){
-            dto = fromUser(contact.get());
-        }else {
-            throw new UsernameNotFoundException(contactName);
-        }
-        return dto;
-    }
-
-
-
-    public void createContact(ContactDto contactDto) {
-
 
     }
 
-    public void deleteContact(String contactName) {
-        userRepository.deleteById(contactName);
+
+
+
+
+    public ContactDto createContact(CreateContactDto createContactDto) {
+
+        Contact contact = new Contact();
+        contact.setContactName(createContactDto.getContactName());
+        contact.setContactEmail(createContactDto.getContactEmail());
+        contact.setContactOrganisation(createContactDto.getContactOrganisation());
+        contact.setContactPhone(createContactDto.getContactPhone());
+        contact.setRemark(createContactDto.getRemark());
+
+        final Contact savedContact = contactRepository.save(contact);
+
+        ContactDto contactDto = new ContactDto();
+        contactDto.setContactNumber(savedContact.getContactNumber());
+        contactDto.setContactName(savedContact.getContactName());
+        contactDto.setContactEmail(savedContact.getContactEmail());
+        contactDto.setContactOrganisation(savedContact.getContactOrganisation());
+        contactDto.setContactPhone(savedContact.getContactPhone());
+        contactDto.setRemark(savedContact.getRemark());
+
+        return contactDto;
     }
 
-    public void updateContact(String username, ContactDto newUser) {
-        if (!userRepository.existsById(username)) throw new RecordNotFoundException();
-        User user = userRepository.findById(username).get();
-        user.setPassword(newUser.getPassword());
-        userRepository.save(user);
+
+    public void deleteContact(Long contactNumber) {
+        contactRepository.deleteById(contactNumber);
     }
+
+
 }

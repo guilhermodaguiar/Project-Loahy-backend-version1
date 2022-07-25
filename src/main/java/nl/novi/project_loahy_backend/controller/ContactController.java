@@ -1,6 +1,7 @@
 package nl.novi.project_loahy_backend.controller;
 
 import nl.novi.project_loahy_backend.Dto.ContactDto;
+import nl.novi.project_loahy_backend.Dto.CreateContactDto;
 import nl.novi.project_loahy_backend.service.ContactService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,17 +21,19 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @GetMapping(path = "")
+    @GetMapping()
     public ResponseEntity<List<ContactDto>> getContacts() {
+
         List<ContactDto> contactDtos = contactService.getContacts();
 
         return ResponseEntity.ok().body(contactDtos);
     }
 
+    //later aanpassen
     @GetMapping(path = "/{contact-name}")
-    public ResponseEntity<ContactDto> getUser(@PathVariable("contact-name") String contactname) {
+    public ResponseEntity<ContactDto> getContact(@PathVariable("contact-name") Long contactNumber) {
 
-        ContactDto optionalContact = contactService.getContact(contactname);
+        ContactDto optionalContact = contactService.getContact(contactNumber);
 
 
         return ResponseEntity.ok().body(optionalContact);
@@ -42,21 +45,13 @@ public class ContactController {
 
         final ContactDto createdContact = contactService.createContact(createContactDto);
 
-        return ResponseEntity.ok().(createdContact);
+        return ResponseEntity.ok(createdContact);
     }
 
 
-    @PutMapping(value = "/{contact-name}")
-    public ResponseEntity<ContactDto> updateContact(@PathVariable("contact-name") String contactName, @RequestBody ContactDto contactDto) {
-
-        contactService.updateContact(contactName, contactDto);
-
-        return ResponseEntity.noContent().build();
-    }
-
-    @DeleteMapping(path = "contact-name")
-    public ResponseEntity<ContactDto> deleteContact(@PathVariable("contact-name") String contactName) {
-        contactService.deleteContact(contactName);
+    @DeleteMapping(path = "/{contact-id}")
+    public ResponseEntity<ContactDto> deleteContact(@PathVariable("contact-id") Long contactNumber) {
+        contactService.deleteContact(contactNumber);
         return ResponseEntity.noContent().build();
     }
 
