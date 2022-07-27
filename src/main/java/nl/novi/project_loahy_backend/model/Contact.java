@@ -1,17 +1,14 @@
 package nl.novi.project_loahy_backend.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
 public class Contact {
 
     @Id
-    @Column
-    private Long contactNumber;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long contactId;
     @Column
     private String contactName;
     @Column
@@ -30,12 +27,12 @@ public class Contact {
         return contactName;
     }
 
-    public Long getContactNumber() {
-        return contactNumber;
+    public Long getContactId() {
+        return contactId;
     }
 
-    public void setContactNumber(Long contactNumber) {
-        this.contactNumber = contactNumber;
+    public void setContactId(Long contactNumber) {
+        this.contactId = contactNumber;
     }
 
     public void setContactName(String contactName) {

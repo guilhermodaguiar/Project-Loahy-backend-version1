@@ -4,9 +4,10 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
-import javax.persistence.GeneratedValue;
+import java.util.List;
 
 @Entity
+@Table(name="products")
 public class Product{
 
     @Id
@@ -16,17 +17,22 @@ public class Product{
             strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
             parameters = {
                     @Parameter(name = "sequence_name", value = "product_sequence"),
-                    @Parameter(name = "initial_value", value = "1003"),
+                    @Parameter(name = "initial_value", value = "1000"),
                     @Parameter(name = "increment_size", value = "1")
             }
             )
-    private Long productNumber;
+    private Long productId;
+    @Column(name="product_name")
     private String productName;
+    @Column(name="product_info")
     private String productInformation;
-
+    @Column(name="product_price")
     private Long productPrice;
-
+    @Column(name="product_qt")
     private Long productQuantity;
+
+    @OneToMany(mappedBy = "custumer")
+    private List<Product> products;
 
     @OneToOne
     FileUploadResponse file;
@@ -37,8 +43,8 @@ public class Product{
         this.productName = productName;
         this.productQuantity = productQuantity;
     }
-    public Product(Long productNumber, String productInformation, String productName, Long productQuantity) {
-        this.productNumber = productNumber;
+    public Product(Long productId, String productInformation, String productName, Long productQuantity) {
+        this.productId = productId;
         this.productInformation = productInformation;
         this.productName = productName;
         this.productQuantity = productQuantity;
@@ -48,8 +54,8 @@ public class Product{
 
     }
 
-    public Long getProductNumber() {
-        return productNumber;
+    public Long getProductId() {
+        return productId;
     }
 
     public String getProductInformation() {
@@ -68,8 +74,8 @@ public class Product{
         return file;
     }
 
-    public void setProductNumber(Long productNumber) {
-        this.productNumber = productNumber;
+    public void setProductId(Long productNumber) {
+        this.productId = productNumber;
     }
 
     public void setProductQuantity(Long productQuantity) {

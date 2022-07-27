@@ -1,19 +1,17 @@
 package nl.novi.project_loahy_backend.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table
 public class Brand {
 
     @Id
-    @Column
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String brandTitle;
 
     private String brandInformation;
+
 
     public String getBrandTitle() {
         return brandTitle;
@@ -30,4 +28,5 @@ public class Brand {
     public void setBrandInformation(String brandInformation) {
         this.brandInformation = brandInformation;
     }
+
 }

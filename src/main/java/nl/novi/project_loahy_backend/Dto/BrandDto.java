@@ -1,9 +1,11 @@
 package nl.novi.project_loahy_backend.Dto;
 
+import javax.validation.constraints.NotBlank;
+
 public class BrandDto {
-
+    @NotBlank
     private String brandTitle;
-
+    @NotBlank
     private String brandInfo;
 
 

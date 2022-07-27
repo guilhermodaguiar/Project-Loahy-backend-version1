@@ -1,6 +1,5 @@
 package nl.novi.project_loahy_backend.controller;
 
-import nl.novi.project_loahy_backend.Dto.ContactDto;
 import nl.novi.project_loahy_backend.Dto.CreateProductDto;
 import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.net.URI;
 import java.util.List;
 
 @CrossOrigin
@@ -29,21 +29,20 @@ public class ProductController {
 
     @GetMapping
     @Transactional
-    public ResponseEntity<List<ProductDto>> getProducts() {
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
 
-        List<ProductDto> productsDto;
-        productsDto = productService.getProducts();
+        List<ProductDto> productsDto = productService.getAllProducts();
 
-        return ResponseEntity.ok(productsDto);
-
+        return ResponseEntity.ok().body(productsDto);
     }
 
-    //later aanpassen
-    @GetMapping("/{product-number}")
-    @Transactional
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("product-number") Long productNumber) {
 
-        ProductDto optionalProduct = productService.getProduct(productNumber);
+    @GetMapping(path="/{id}")
+    @Transactional
+    public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
+
+        ProductDto optionalProduct = productService.getProductById(productId);
+
         return ResponseEntity.ok().body(optionalProduct);
 
     }
@@ -53,31 +52,35 @@ public class ProductController {
 
         final ProductDto createdProduct = productService.createProduct(createdProductDto);
 
-        return ResponseEntity.ok(createdProduct);
-    }
-
-    @PutMapping("/{productNumber}")
-    public Product updateProduct(@PathVariable Long productNumber, @RequestBody Product product) {
-
-        return productService.updateProduct(productNumber, product);
-
+        final URI location = URI.create("/products/" + createdProduct.getProductId());
+        return ResponseEntity
+                .created(location)
+                .body(createdProduct);
     }
 
 
-    @DeleteMapping(path = "/{product-id}")
-    public ResponseEntity<ProductDto> deleteContact(@PathVariable("product-id") Long productNumber) {
-        productService.deleteProduct(productNumber);
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody Product product) {
+
+        return productService.updateProduct(productId, product);
+
+    }
+
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<ProductDto> deleteProduct(@PathVariable("id") Long productId) {
+        productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
 
-    @PostMapping("/{product-id}/product-image")
-    public void assignImageToProduct(@PathVariable("product-id") Long productNumber,
+    @PostMapping("/{id}/image")
+    public void assignImageToProduct(@PathVariable("id") Long productId,
                                      @RequestBody MultipartFile file) {
 
         FileUploadResponse productImage = imageController.singleFileUpload(file);
 
-        productService.assignImageToProduct(productImage.getFileName(), productNumber);
+        productService.assignImageToProduct(productImage.getFileName(), productId);
 
     }
 }

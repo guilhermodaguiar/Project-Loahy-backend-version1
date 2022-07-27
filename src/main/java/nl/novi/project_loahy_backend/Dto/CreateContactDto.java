@@ -1,11 +1,17 @@
 package nl.novi.project_loahy_backend.Dto;
 
-public class CreateContactDto {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
+public class CreateContactDto {
+    @NotBlank
     private String contactName;
+    @Email
     private String contactEmail;
+    @NotBlank
     private Long contactPhone;
     private String contactOrganisation;
+    @NotBlank
     private String remark;
 
 

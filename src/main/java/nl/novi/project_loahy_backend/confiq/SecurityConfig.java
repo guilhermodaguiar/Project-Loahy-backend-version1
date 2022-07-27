@@ -13,7 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
@@ -35,14 +38,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.userDetailsService();
     }
 
+    @Autowired
+    private DataSource dataSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .inMemoryAuthentication()
-                .withUser("karel").password("{noop}appel").roles("ADMIN");
+                .jdbcAuthentication()
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select username, password, enabled from users where username=?")
+                .authoritiesByUsernameQuery("select username, role from users where username=?");
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -52,10 +59,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/users/login").permitAll()
-                .antMatchers(HttpMethod.GET,"/users").hasRole("ADMIN")
-                .antMatchers(HttpMethod.POST,"/users/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/costumer/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/admin/login").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.GET,"/admin").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/admin/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/admin/**").hasAuthority("ADMIN")
                 .and()
                 .authorizeRequests().anyRequest().authenticated()
                 .and()

@@ -2,14 +2,12 @@ package nl.novi.project_loahy_backend.service;
 
 import nl.novi.project_loahy_backend.Dto.ContactDto;
 import nl.novi.project_loahy_backend.Dto.CreateContactDto;
-import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
 import nl.novi.project_loahy_backend.model.Contact;
 import nl.novi.project_loahy_backend.repository.ContactRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ContactService {
@@ -22,23 +20,13 @@ public class ContactService {
         this.contactRepository = contactRepository;
     }
 
-    public List<ContactDto> getContacts(){
-        return contactRepository.findAll();
+    public List<ContactDto> getAllContacts(){
+        return null;
     }
+
     //later aanpassen
-    public ContactDto getContact(Long contactNumber) {
-
-        Optional<Contact> contact = contactRepository.findById(contactNumber);
-
-        if(contact.isPresent()) {
-
-            return contact.get();
-
-        } else {
-
-            throw new RecordNotFoundException("Contact does not exist");
-
-        }
+    public ContactDto getContactById(Long contactId) {
+        return null;
 
     }
 
@@ -58,7 +46,7 @@ public class ContactService {
         final Contact savedContact = contactRepository.save(contact);
 
         ContactDto contactDto = new ContactDto();
-        contactDto.setContactNumber(savedContact.getContactNumber());
+        contactDto.setContactId(savedContact.getContactId());
         contactDto.setContactName(savedContact.getContactName());
         contactDto.setContactEmail(savedContact.getContactEmail());
         contactDto.setContactOrganisation(savedContact.getContactOrganisation());
@@ -69,8 +57,8 @@ public class ContactService {
     }
 
 
-    public void deleteContact(Long contactNumber) {
-        contactRepository.deleteById(contactNumber);
+    public void deleteContact(Long contactId) {
+        contactRepository.deleteById(contactId);
     }
 
 

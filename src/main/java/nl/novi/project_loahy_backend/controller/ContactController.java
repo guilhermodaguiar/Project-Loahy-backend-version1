@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(path="/contactus")
+@RequestMapping(path="/contacts")
 public class ContactController {
 
     @Autowired
@@ -22,18 +23,18 @@ public class ContactController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<ContactDto>> getContacts() {
+    public ResponseEntity<List<ContactDto>> getAllContacts() {
 
-        List<ContactDto> contactDtos = contactService.getContacts();
+        List<ContactDto> contactDtos = contactService.getAllContacts();
 
         return ResponseEntity.ok().body(contactDtos);
     }
 
     //later aanpassen
-    @GetMapping(path = "/{contact-name}")
-    public ResponseEntity<ContactDto> getContact(@PathVariable("contact-name") Long contactNumber) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<ContactDto> getContact(@PathVariable("id") Long contactId) {
 
-        ContactDto optionalContact = contactService.getContact(contactNumber);
+        ContactDto optionalContact = contactService.getContactById(contactId);
 
 
         return ResponseEntity.ok().body(optionalContact);
@@ -45,7 +46,10 @@ public class ContactController {
 
         final ContactDto createdContact = contactService.createContact(createContactDto);
 
-        return ResponseEntity.ok(createdContact);
+        final URI location = URI.create("/contacts/" + createdContact.getContactId());
+        return ResponseEntity
+                .created(location)
+                .body(createdContact);
     }
 
 

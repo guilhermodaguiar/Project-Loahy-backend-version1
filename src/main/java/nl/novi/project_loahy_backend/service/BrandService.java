@@ -2,12 +2,12 @@ package nl.novi.project_loahy_backend.service;
 
 import nl.novi.project_loahy_backend.Dto.BrandDto;
 import nl.novi.project_loahy_backend.Dto.CreateBrandDto;
-import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
 import nl.novi.project_loahy_backend.model.Brand;
 import nl.novi.project_loahy_backend.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +21,17 @@ public class BrandService {
         this.brandRepository = brandRepository;
     }
 
-    //aanpassen
+
     public List<BrandDto> getBrandsInfo() {
-        return brandRepository.findAll();
+        List<BrandDto> collection = new ArrayList<>();
+        List<Brand> list = brandRepository.findAll();
+        for (Brand brand : list) {
+            collection.add(fromBrand(brand));
+        }
+        return collection;
     }
+
+
 
 
     public BrandDto createBrandInfo(CreateBrandDto createBrandDto) {
@@ -44,10 +51,18 @@ public class BrandService {
 
     //later aanpassen
     public BrandDto updateBrandInfo(String BrandTitle, BrandDto brandDto) {
-        return brandRepository.save(old);
-    } else {
-
-        throw new RecordNotFoundException("Brand update failed")
+    return null;
     }
+
+    BrandDto fromBrand(Brand brand) {
+
+        var dto =  new BrandDto();
+
+        brand.setBrandTitle(brand.getBrandTitle());
+        brand.setBrandInformation(brand.getBrandInformation());
+
+        return dto;
+    }
+
 
 }

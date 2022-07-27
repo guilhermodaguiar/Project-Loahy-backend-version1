@@ -2,7 +2,9 @@ package nl.novi.project_loahy_backend.service;
 
 import nl.novi.project_loahy_backend.Dto.CreateProductDto;
 import nl.novi.project_loahy_backend.Dto.ProductDto;
-import nl.novi.project_loahy_backend.exeptions.RecordNotFoundException;
+import nl.novi.project_loahy_backend.exeptions.ProductExistException;
+import nl.novi.project_loahy_backend.exeptions.ProductNotFoundException;
+import nl.novi.project_loahy_backend.exeptions.CostumerNotFoundException;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 import nl.novi.project_loahy_backend.model.Product;
 import nl.novi.project_loahy_backend.repository.FileUploadRepository;
@@ -28,44 +30,38 @@ public class ProductService {
     }
 
     //later aanpassen
-    public List<ProductDto> getProducts() {
-
-        return productRepository.findAll();
-
+    public List<ProductDto> getAllProducts() {
+    return null;
     }
     //later aanpassen
-    public Product getProduct(Long productNumber) {
-
-        Optional<ProductDto> product = productRepository.findById(productNumber);
-
-        if(product.isPresent()) {
-
-            return product.get();
-
-        } else {
-
-            throw new RecordNotFoundException("Product does not exist");
-
-        }
-
+    public ProductDto getProductById(Long productId) {
+    return null;
     }
 
     public ProductDto createProduct(CreateProductDto createProductDto) {
+
+        final Optional <Product> productOptional =
+                productRepository.findProductByProductNameIs(createProductDto.getProductName());
+        if(productOptional.isPresent()){
+            throw new ProductExistException(createProductDto.getProductName());
+        }
 
         Product product = new Product();
         product.setProductName(createProductDto.getProductName());
         product.setProductInformation(createProductDto.getProductInformation());
         product.setProductQuantity(createProductDto.getProductQuantity());
         product.setProductPrice(createProductDto.getProductPrice());
+        product.setFile(createProductDto.getFile());
 
         final Product savedProduct = productRepository.save(product);
 
         ProductDto productDto = new ProductDto();
-        productDto.setProductNumber(savedProduct.getProductNumber());
+        productDto.setProductId(savedProduct.getProductId());
         productDto.setProductName(savedProduct.getProductName());
         productDto.setProductInformation(savedProduct.getProductInformation());
         productDto.setProductQuantity(savedProduct.getProductQuantity());
         productDto.setProductPrice(savedProduct.getProductPrice());
+        productDto.setFile(savedProduct.getFile());
 
         return productDto;
     }
@@ -78,8 +74,8 @@ public class ProductService {
         if (optionalProduct.isPresent()) {
 
             Product old = optionalProduct.get();
-            if(product.getProductNumber() != null){
-                old.setProductNumber(productNumber);
+            if(product.getProductId() != null){
+                old.setProductId(productNumber);
             }
             if(product.getProductName() != null){
                 old.setProductName(product.getProductName());
@@ -100,33 +96,26 @@ public class ProductService {
 
         } else {
 
-            throw new RecordNotFoundException("Product does not exist");
+            throw new CostumerNotFoundException("Product does not exist");
 
         }
 
     }
 
-    public void deleteProduct(Long productNumber) {
-        productRepository.deleteById(productNumber);
+    public void deleteProduct(Long productId) {
+        productRepository.deleteProductByProductId(productId);
     }
 
-    //later aanpassen
-    public void assignImageToProduct(String name, Long productNumber) {
 
-        Optional<Product> optionalProduct = productRepository.findById(productNumber);
+    public void assignImageToProduct(String name, Long productId) {
 
+        Optional<Product> optionalProduct = productRepository.findById(productId);
         Optional<FileUploadResponse> fileUploadResponse = uploadRepository.findByFileName(name);
-
         if (optionalProduct.isPresent() && fileUploadResponse.isPresent()) {
-
             FileUploadResponse image = fileUploadResponse.get();
-
             Product product = optionalProduct.get();
-
             product.setFile(image);
-
             productRepository.save(product);
-
         }
 
     }

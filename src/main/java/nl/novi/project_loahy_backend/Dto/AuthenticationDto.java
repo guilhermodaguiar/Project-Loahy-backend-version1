@@ -1,7 +1,12 @@
 package nl.novi.project_loahy_backend.Dto;
 
-    public class AuthenticationDto {
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+public class AuthenticationDto {
+        @Email
         private  String userEmail;
+        @NotBlank
         private String password;
 
         public String getUserEmail() {

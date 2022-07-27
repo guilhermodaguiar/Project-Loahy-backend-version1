@@ -1,11 +1,11 @@
 package nl.novi.project_loahy_backend.service;
 
-import nl.novi.project_loahy_backend.exeptions.UserEmailExistException;
+import nl.novi.project_loahy_backend.exeptions.CostumerEmailExistException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class UserEmailExistExceptionTest {
+public class CostumerEmailExistExceptionTest {
 
     @Test
     public void userEmailIsPresentInExceptionMessage(){
@@ -13,7 +13,7 @@ public class UserEmailExistExceptionTest {
         final String expectedUserEmail = "ggd_daguiar@gmail.com";
 
         //Act
-        UserEmailExistException sut = new UserEmailExistException(expectedUserEmail);
+        CostumerEmailExistException sut = new CostumerEmailExistException(expectedUserEmail);
 
         //Assert
         assertTrue(sut.getMessage().contains("'" + expectedUserEmail + "'"));

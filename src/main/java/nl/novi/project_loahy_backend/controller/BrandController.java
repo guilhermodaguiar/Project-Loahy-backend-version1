@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -26,18 +27,13 @@ public class BrandController {
     }
 
     @PostMapping("")
-    public ResponseEntity<BrandDto> createBrandInfo(@RequestBody CreateBrandDto createBrandDto ) {
+    public ResponseEntity<BrandDto> createBrandInfo(@RequestBody CreateBrandDto createBrandDto){
         final BrandDto createBrand = brandService.createBrandInfo(createBrandDto);
 
-        return ResponseEntity.ok(createBrand);
+        final URI location = URI.create("/about-loahy/" + createBrand.getBrandInfo());
+        return ResponseEntity
+                .created(location)
+                .body(createBrand);
     }
-
-    @PutMapping("/{title}")
-    public ResponseEntity<BrandDto> updateBrandInfo(@PathVariable("title") String brandTitle,@RequestBody BrandDto brandDto) {
-
-        brandService.updateBrandInfo(brandDto);
-        return ResponseEntity.noContent().build();
-    }
-
 
 }
