@@ -1,24 +1,29 @@
 package nl.novi.project_loahy_backend.Dto;
 
-
-import lombok.Data;
 import nl.novi.project_loahy_backend.model.Order;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.util.List;
 
-@Data
+
+@Entity
 public class CostumerDto {
 
-
+    @Id
     private Long costumerId;
+
+    private String password;
     private String costumerName;
     private String costumerEmail;
     private String costumerAdres;
     private Long costumerPhone;
 
-    @OneToMany(mappedBy = "custumerid")
-    private List<Order> orders;
+    @OneToMany
+    private List<Order> order;
+
+
 
 
     public Long getCostumerId() {
@@ -61,5 +66,19 @@ public class CostumerDto {
         this.costumerPhone = costumerPhone;
     }
 
+    public List<Order> getOrder() {
+        return order;
+    }
 
+    public void setOrder(List<Order> order) {
+        this.order = order;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

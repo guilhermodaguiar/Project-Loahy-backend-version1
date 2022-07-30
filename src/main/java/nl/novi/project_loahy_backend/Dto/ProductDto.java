@@ -20,6 +20,8 @@ public class ProductDto {
     @OneToOne
     FileUploadResponse file;
 
+
+
     public Long getProductId() {
         return productId;
     }

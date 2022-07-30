@@ -36,4 +36,14 @@ public class BrandController {
                 .body(createBrand);
     }
 
+
+    @PutMapping(value = "")
+    public ResponseEntity<BrandDto> updateBrandInfo(@PathVariable("") String brandTitel, @RequestBody BrandDto brandDto) {
+
+        brandService.updateBrandInfo(brandTitel, brandDto);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
 }

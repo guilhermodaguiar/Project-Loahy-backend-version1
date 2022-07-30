@@ -42,9 +42,9 @@ public class ContactController {
     }
 
     @PostMapping()
-    public ResponseEntity<ContactDto> createContact(@RequestBody CreateContactDto createContactDto) {
+    public ResponseEntity<ContactDto> createRemark(@RequestBody CreateContactDto createContactDto) {
 
-        final ContactDto createdContact = contactService.createContact(createContactDto);
+        final ContactDto createdContact = contactService.createRemark(createContactDto);
 
         final URI location = URI.create("/contacts/" + createdContact.getContactId());
         return ResponseEntity
@@ -54,8 +54,8 @@ public class ContactController {
 
 
     @DeleteMapping(path = "/{contact-id}")
-    public ResponseEntity<ContactDto> deleteContact(@PathVariable("contact-id") Long contactNumber) {
-        contactService.deleteContact(contactNumber);
+    public ResponseEntity<ContactDto> deleteContact(@PathVariable("contact-id") Long contactId) {
+        contactService.deleteContact(contactId);
         return ResponseEntity.noContent().build();
     }
 

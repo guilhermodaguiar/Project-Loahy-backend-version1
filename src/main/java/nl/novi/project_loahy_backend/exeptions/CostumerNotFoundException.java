@@ -4,9 +4,9 @@ package nl.novi.project_loahy_backend.exeptions;
      private static final long serialVersionUID = 1L;
 
 
-     public CostumerNotFoundException(Long userNumber) {
+     public CostumerNotFoundException(Long customerId) {
 
-         super(String.format("Costumer '%s' does not exists", userNumber));
+         super(String.format("Costumer '%s' does not exists", customerId));
      }
 
  }

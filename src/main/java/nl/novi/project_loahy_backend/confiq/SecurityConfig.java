@@ -34,12 +34,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    private BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public UserDetailsService userDetailsService() {
         return super.userDetailsService();
     }
 
     @Autowired
     private DataSource dataSource;
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

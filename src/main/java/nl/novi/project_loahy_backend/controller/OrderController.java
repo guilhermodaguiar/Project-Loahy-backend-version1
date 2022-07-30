@@ -3,7 +3,6 @@ package nl.novi.project_loahy_backend.controller;
 import nl.novi.project_loahy_backend.Dto.CreateOrderDto;
 import nl.novi.project_loahy_backend.Dto.OrderDto;
 import nl.novi.project_loahy_backend.service.OrderService;
-import nl.novi.project_loahy_backend.service.CostumerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +16,11 @@ public class OrderController {
 
     @Autowired
     private final OrderService orderService;
-    private final CostumerService costumerService;
 
-    public OrderController(OrderService orderService, CostumerService costumerService) {
+    public OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.costumerService = costumerService;
     }
+
 
     @GetMapping()
     public ResponseEntity<List<OrderDto>> getAllOrders() {
@@ -31,10 +29,10 @@ public class OrderController {
         return ResponseEntity.ok().body(orderDtos);
     }
 
-    @GetMapping(path = "/{order-number}")
-    public ResponseEntity<OrderDto> getOrderById(@PathVariable("order-number") Long orderNumber) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<OrderDto> getOrderById(@PathVariable("id") Long orderId) {
 
-        OrderDto optionalOrder = orderService.getOrderById(orderNumber);
+        OrderDto optionalOrder = orderService.getOrderById(orderId);
 
         return ResponseEntity.ok().body(optionalOrder);
     }
@@ -50,6 +48,12 @@ public class OrderController {
                 .created(location)
                 .body(createdOrder);
 
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<OrderDto> deleteOrder(@PathVariable("id") Long orderId) {
+        orderService.deleteOrder(orderId);
+        return ResponseEntity.noContent().build();
     }
 
 }

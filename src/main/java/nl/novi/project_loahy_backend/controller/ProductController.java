@@ -3,7 +3,6 @@ package nl.novi.project_loahy_backend.controller;
 import nl.novi.project_loahy_backend.Dto.CreateProductDto;
 import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
-import nl.novi.project_loahy_backend.model.Product;
 import nl.novi.project_loahy_backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +40,7 @@ public class ProductController {
     @Transactional
     public ResponseEntity<ProductDto> getProductById(@PathVariable("id") Long productId) {
 
-        ProductDto optionalProduct = productService.getProductById(productId);
+        ProductDto optionalProduct = productService.getProduct(productId);
 
         return ResponseEntity.ok().body(optionalProduct);
 
@@ -60,9 +59,10 @@ public class ProductController {
 
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable("id") Long productId, @RequestBody Product product) {
+    public ResponseEntity<ProductDto> updateProduct (@PathVariable("id") Long productId, @RequestBody ProductDto productDto) {
 
-        return productService.updateProduct(productId, product);
+        productService.updateProduct(productId, productDto);
+        return ResponseEntity.noContent().build();
 
     }
 
@@ -83,4 +83,5 @@ public class ProductController {
         productService.assignImageToProduct(productImage.getFileName(), productId);
 
     }
+
 }

@@ -1,16 +1,16 @@
 package nl.novi.project_loahy_backend.service;
 
 
-import nl.novi.project_loahy_backend.Dto.CreateCostumerDto;
 import nl.novi.project_loahy_backend.Dto.CostumerDto;
-import nl.novi.project_loahy_backend.exeptions.CostumerNotFoundException;
+import nl.novi.project_loahy_backend.Dto.CreateCostumerDto;
 import nl.novi.project_loahy_backend.exeptions.CostumerEmailExistException;
+import nl.novi.project_loahy_backend.exeptions.CostumerNotFoundException;
 import nl.novi.project_loahy_backend.model.Costumer;
 import nl.novi.project_loahy_backend.repository.CostumerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,23 +19,32 @@ import java.util.Optional;
 public class CostumerService {
     private final CostumerRepository costumerRepository;
 
+
     @Autowired
-    public CostumerService(CostumerRepository costumerRepository){this.costumerRepository = costumerRepository;}
+    public CostumerService(CostumerRepository costumerRepository) {
+        this.costumerRepository = costumerRepository;
+    }
 
     public List<CostumerDto> getAllCostumers() {
+        List<CostumerDto> collection = new ArrayList<>();
         List<Costumer> list = costumerRepository.findAll();
-        return null;
+        for (Costumer costumer : list) {
+            collection.add(fromCostumer(costumer));
+        }
+        return collection;
     }
 
 
-    public CostumerDto getCostumerById(Long CostumerId) {
-        CostumerDto costumerDto = new CostumerDto();
-        Optional<Costumer> costumer = costumerRepository.findById(CostumerId);
+    public CostumerDto getCostumerById(Long costumerId) {
+        new CostumerDto();
+        CostumerDto costumerDto;
+        Optional<Costumer> costumer = costumerRepository.findById(costumerId);
         if (costumer.isPresent()) {
-            return fromCostumer(costumer.get());
+            costumerDto = fromCostumer(costumer.get());
         } else {
-            throw new CostumerNotFoundException(CostumerId);
+            throw new CostumerNotFoundException(costumerId);
         }
+        return costumerDto;
     }
 
 
@@ -66,10 +75,15 @@ public class CostumerService {
         return costumerDto;
     }
 
-    //later aanpassen
-    public void updateUser(Long userNumber, CostumerDto newCostumer) {
-        if (!costumerRepository.existsById(userNumber)) throw new CostumerNotFoundException();
-        Costumer costumer = costumerRepository.findById(userNumber).get();
+
+    public void updateUser(Long costumerId, CostumerDto newCostumer) {
+        if (!costumerRepository.existsById(costumerId)) throw new CostumerNotFoundException(costumerId);
+        Costumer costumer = costumerRepository.findById(costumerId).get();
+        costumer.setCostumerName(newCostumer.getCostumerName());
+        costumer.setCostumerPassword(newCostumer.getPassword());
+        costumer.setCostumerEmail(newCostumer.getCostumerEmail());
+        costumer.setCostumerAdres(newCostumer.getCostumerAdres());
+        costumer.setCostumerPhone(newCostumer.getCostumerPhone());
         costumerRepository.save(costumer);
     }
 
@@ -77,4 +91,19 @@ public class CostumerService {
         costumerRepository.deleteById(costumerId);
     }
 
+
+
+    public static CostumerDto fromCostumer(Costumer costumer){
+
+        var costumerDto = new CostumerDto();
+
+        costumerDto.setCostumerId(costumer.getCostumerId());
+        costumerDto.setCostumerName(costumer.getCostumerName());
+        costumerDto.setCostumerEmail(costumer.getCostumerEmail());
+        costumerDto.setCostumerAdres(costumer.getCostumerAdres());
+        costumerDto.setCostumerPhone(costumer.getCostumerPhone());
+
+
+        return costumerDto;
+    }
 }

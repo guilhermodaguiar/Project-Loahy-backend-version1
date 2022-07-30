@@ -4,7 +4,6 @@ import nl.novi.project_loahy_backend.Dto.CreateProductDto;
 import nl.novi.project_loahy_backend.Dto.ProductDto;
 import nl.novi.project_loahy_backend.exeptions.ProductExistException;
 import nl.novi.project_loahy_backend.exeptions.ProductNotFoundException;
-import nl.novi.project_loahy_backend.exeptions.CostumerNotFoundException;
 import nl.novi.project_loahy_backend.model.FileUploadResponse;
 import nl.novi.project_loahy_backend.model.Product;
 import nl.novi.project_loahy_backend.repository.FileUploadRepository;
@@ -12,6 +11,7 @@ import nl.novi.project_loahy_backend.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,25 +24,39 @@ public class ProductService {
     private final FileUploadRepository uploadRepository;
 
     @Autowired
-    public ProductService(ProductRepository productRepository, FileUploadRepository uploadRepository){
+    public ProductService(ProductRepository productRepository, FileUploadRepository uploadRepository) {
         this.productRepository = productRepository;
         this.uploadRepository = uploadRepository;
     }
 
-    //later aanpassen
+
     public List<ProductDto> getAllProducts() {
-    return null;
+        List<ProductDto> collection = new ArrayList<>();
+        List<Product> list = productRepository.findAll();
+        for (Product product : list) {
+            collection.add(fromProduct(product));
+        }
+        return collection;
     }
-    //later aanpassen
-    public ProductDto getProductById(Long productId) {
-    return null;
+
+    public ProductDto getProduct(Long productId) {
+        new ProductDto();
+        ProductDto productDto;
+        Optional<Product> product = productRepository.findById(productId);
+        if (product.isPresent()) {
+            productDto = fromProduct(product.get());
+        } else {
+            throw new ProductNotFoundException(productId);
+        }
+        return productDto;
     }
+
 
     public ProductDto createProduct(CreateProductDto createProductDto) {
 
-        final Optional <Product> productOptional =
+        final Optional<Product> productOptional =
                 productRepository.findProductByProductNameIs(createProductDto.getProductName());
-        if(productOptional.isPresent()){
+        if (productOptional.isPresent()) {
             throw new ProductExistException(createProductDto.getProductName());
         }
 
@@ -66,41 +80,18 @@ public class ProductService {
         return productDto;
     }
 
-    //later aanpassen
-    public Product updateProduct(Long productNumber, Product product) {
 
-        Optional<Product> optionalProduct = productRepository.findById(productNumber);
-
-        if (optionalProduct.isPresent()) {
-
-            Product old = optionalProduct.get();
-            if(product.getProductId() != null){
-                old.setProductId(productNumber);
-            }
-            if(product.getProductName() != null){
-                old.setProductName(product.getProductName());
-            }
-            if(product.getProductInformation() != null){
-                old.setProductInformation(product.getProductInformation());
-            }
-            if(product.getProductQuantity() != null){
-                old.setProductQuantity(product.getProductQuantity());
-            }
-            if(old.getFile() != null && product.getFile() != null){
-                old.setFile(product.getFile());
-            } else if (old.getFile() != null) {
-                old.setFile(old.getFile());
-            }
-
-            return productRepository.save(old);
-
-        } else {
-
-            throw new CostumerNotFoundException("Product does not exist");
-
-        }
-
+    public void updateProduct(Long productId, ProductDto newProduct) {
+        if (!productRepository.existsById(productId)) throw new ProductNotFoundException(productId);
+        Product product = productRepository.findById(productId).get();
+        product.setProductName(newProduct.getProductName());
+        product.setProductInformation(newProduct.getProductInformation());
+        product.setProductPrice(newProduct.getProductPrice());
+        product.setProductQuantity(newProduct.getProductQuantity());
+        productRepository.save(product);
     }
+
+
 
     public void deleteProduct(Long productId) {
         productRepository.deleteProductByProductId(productId);
@@ -117,6 +108,20 @@ public class ProductService {
             product.setFile(image);
             productRepository.save(product);
         }
+    }
+
+    public static ProductDto fromProduct(Product product) {
+
+        var productDto = new ProductDto();
+
+        productDto.setProductName(product.getProductName());
+        productDto.setProductInformation(product.getProductInformation());
+        productDto.setProductQuantity(product.getProductQuantity());
+        productDto.setProductPrice(product.getProductPrice());
+        productDto.setFile(product.getFile());
+
+
+        return productDto;
 
     }
 }

@@ -1,20 +1,30 @@
 package nl.novi.project_loahy_backend.Dto;
 
 
+import nl.novi.project_loahy_backend.model.Costumer;
+import nl.novi.project_loahy_backend.model.Product;
+
 import java.time.LocalDate;
+import java.util.List;
 
 public class OrderDto {
-    private Long OrderId;
-    private LocalDate orderDate;
+    public List<Product> products;
+    public Long orderId;
+    public LocalDate orderDate;
 
-    private CostumerDto user;
+    public Costumer costumer;
+
+    private Long productId;
+    private String productName;
+    private Long productQuantity;
+
 
     public Long getOrderId() {
-        return OrderId;
+        return orderId;
     }
 
     public void setOrderId(Long orderId) {
-        this.OrderId = orderId;
+        this.orderId = orderId;
     }
 
     public LocalDate getOrderDate() {
@@ -25,11 +35,38 @@ public class OrderDto {
         this.orderDate = orderDate;
     }
 
-    public CostumerDto getUser() {
-        return user;
+    public Costumer getCostumer() {
+        return costumer;
     }
 
-    public void setUser(CostumerDto user) {
-        this.user = user;
+    public void setCostumer(Costumer costumer) {
+        this.costumer = costumer;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public Long getProductQuantity() {
+        return productQuantity;
+    }
+
+    public void setProductQuantity(Long productQuantity) {
+        this.productQuantity = productQuantity;
+    }
+
+    public void setProductQuantity() {
     }
 }

@@ -1,10 +1,8 @@
 package nl.novi.project_loahy_backend.model;
 
-import nl.novi.project_loahy_backend.Dto.CostumerDto;
-import nl.novi.project_loahy_backend.Dto.ProductDto;
-
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="orders")
@@ -18,10 +16,18 @@ public class Order {
     private LocalDate orderDate;
 
     @ManyToOne
-    private CostumerDto costumer;
+    private Costumer costumer;
 
-    @ManyToOne
-    private ProductDto product;
+    @OneToMany(mappedBy="order")
+    private List<Product> products;
+
+
+    public Order(Costumer costumer, List<Product> products) {
+        this.costumer = costumer;
+        this.products = products;
+    }
+    public Order() {
+    }
 
 
     public Long getOrderId() {
@@ -41,23 +47,21 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public CostumerDto getCostumer() {
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public Costumer getCostumer() {
         return costumer;
     }
 
-    public void setCostumer(CostumerDto costumer) {
+    public void setCostumer(Costumer costumer) {
         this.costumer = costumer;
     }
-
-    public ProductDto getProduct() {
-        return product;
-    }
-
-    public void setProduct(ProductDto product) {
-        this.product = product;
-    }
-
-
     //Denk ik een one to many met producten of one to one met producten
 
 

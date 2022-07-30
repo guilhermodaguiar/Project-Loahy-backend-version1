@@ -22,9 +22,8 @@ public class Costumer {
     @Column(name="costumer_phone")
     private Long costumerPhone;
 
-    @OneToMany(mappedBy = "custumerid")
+    @OneToMany(mappedBy = "customer")
     private List<Order> orders;
-
 
     public Costumer() {
     }
